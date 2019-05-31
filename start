@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+echo 'Starting samba ...'
+
+/usr/sbin/nmbd -FS &
+/usr/sbin/smbd -FS &
+
+sleep 5
+
+trap 'kill $(cat /var/run/samba/nmbd.pid) $(cat /var/run/samba/smbd.pid)' TERM INT
+
+wait "$(cat /var/run/samba/nmbd.pid)"
+wait "$(cat /var/run/samba/smbd.pid)"
